@@ -11,6 +11,11 @@ def hello():
 @socketio.on('connect')
 def on_connect():
     print 'Someone connected!'
+    flask_socketio.emit('message', {
+        'from': 'Server',
+        'to': 'chat_room',
+        'text': 'got your connection'
+    })
     
 @socketio.on('login')
 def on_login(data):

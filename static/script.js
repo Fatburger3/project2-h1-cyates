@@ -12767,13 +12767,34 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Content = exports.Content = function (_React$Component) {
     _inherits(Content, _React$Component);
 
-    function Content() {
+    function Content(props) {
         _classCallCheck(this, Content);
 
-        return _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (Content.__proto__ || Object.getPrototypeOf(Content)).call(this, props));
+
+        _this.state = {
+            'messages': []
+        };
+        return _this;
     }
 
     _createClass(Content, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            _Socket.Socket.on('update', function (data) {
+                _this2.setState(data);
+            });
+            _Socket.Socket.on('message', function (data) {
+                console.log(data);
+                console.log(data.from + ": " + data.text);
+                _this2.state.messages.push(data.from + ": " + data.text);
+                console.log(_this2.state);
+                _this2.forceUpdate();
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return React.createElement(
@@ -12783,7 +12804,15 @@ var Content = exports.Content = function (_React$Component) {
                 React.createElement(
                     'div',
                     { className: 'right' },
-                    React.createElement('div', { id: 'conv_view' }),
+                    React.createElement(
+                        'div',
+                        { id: 'conv_view' },
+                        React.createElement(
+                            'li',
+                            { id: 'messages' },
+                            this.state.messages
+                        )
+                    ),
                     React.createElement(_SendMessageBox.SendMessageBox, { id: 'text_view' })
                 )
             );
