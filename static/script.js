@@ -12774,8 +12774,9 @@ var Content = exports.Content = function (_React$Component) {
 
         _this.state = {
             'username': 0,
-            'isLoggedIn': 0,
-            'messages': []
+            'is_logged_in': 0,
+            'messages': [],
+            'all_users': []
         };
         return _this;
     }
@@ -12793,10 +12794,32 @@ var Content = exports.Content = function (_React$Component) {
                 console.log(data);
                 console.log(data.from + ": " + data.text);
                 var state_messages = _this2.state.messages;
-                state_messages.push(data.from + ": " + data.text);
+                state_messages.push(React.createElement(
+                    'li',
+                    { key: data.id },
+                    React.createElement(
+                        'h3',
+                        null,
+                        data.from,
+                        ':'
+                    ),
+                    React.createElement(
+                        'p',
+                        null,
+                        data.text
+                    )
+                ));
                 _this2.setState({ messages: state_messages });
                 console.log(_this2.state);
                 _this2.forceUpdate();
+            });
+            _Socket.Socket.on('add user', function (data) {
+                console.log(data);
+                var state_all_users = _this2.state.all_users;
+                state_all_users.push(data);
+                _this2.setState({
+                    all_users: state_all_users
+                });
             });
 
             _Socket.Socket.on('valid login', function (data) {
@@ -12804,7 +12827,7 @@ var Content = exports.Content = function (_React$Component) {
                 console.log(data.username);
                 _this2.setState({
                     'username': data.username,
-                    'isLoggedIn': 1
+                    'is_logged_in': 1
                 });
                 _this2.forceUpdate();
             });
@@ -12823,24 +12846,24 @@ var Content = exports.Content = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            if (this.state.isLoggedIn === 0) return React.createElement(_Login.LoginContent, null);
+            if (this.state.is_logged_in === 0) return React.createElement(_Login.LoginContent, null);
 
-            var messages = [];
+            var all_users = [];
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
 
             try {
-                for (var _iterator = this.state['messages'][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var message = _step.value;
+                for (var _iterator = this.state['all_users'][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var user = _step.value;
 
-                    console.log(message);
+                    console.log(user);
                     var item = React.createElement(
                         'li',
-                        { key: message },
-                        message
+                        { key: user },
+                        user
                     );
-                    messages.push(item);
+                    all_users.push(item);
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -12860,7 +12883,15 @@ var Content = exports.Content = function (_React$Component) {
             return React.createElement(
                 'div',
                 null,
-                React.createElement('div', { id: 'thread_view', className: 'left' }),
+                React.createElement(
+                    'div',
+                    { id: 'thread_view', className: 'left' },
+                    React.createElement(
+                        'ul',
+                        null,
+                        this.state.all_users
+                    )
+                ),
                 React.createElement(
                     'div',
                     { className: 'right' },
@@ -12868,9 +12899,9 @@ var Content = exports.Content = function (_React$Component) {
                         'div',
                         { id: 'conv_view' },
                         React.createElement(
-                            'li',
+                            'ul',
                             { id: 'messages' },
-                            messages
+                            this.state.messages
                         )
                     ),
                     React.createElement(

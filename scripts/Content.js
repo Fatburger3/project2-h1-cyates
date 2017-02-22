@@ -8,8 +8,9 @@ export class Content extends React.Component {
         super(props);
         this.state = {
             'username': 0,
-            'isLoggedIn': 0,
+            'is_logged_in': 0,
             'messages': [],
+            'all_users': []
         };
     }
     
@@ -23,10 +24,23 @@ export class Content extends React.Component {
             console.log(data);
             console.log(data.from + ": " + data.text);
             var state_messages = this.state.messages;
-            state_messages.push(data.from + ": " + data.text);
+            state_messages.push(
+                <li key= {data.id}>
+                    <h3>{data.from}:</h3>
+                    <p>{data.text}</p>
+                </li>
+            );
             this.setState({messages: state_messages});
             console.log(this.state);
             this.forceUpdate();
+        });
+        Socket.on('add user', (data) => {
+            console.log(data);
+            var state_all_users = this.state.all_users;
+            state_all_users.push(data);
+            this.setState({
+                all_users: state_all_users
+            });
         });
         
         Socket.on('valid login', (data) => {
@@ -34,7 +48,7 @@ export class Content extends React.Component {
             console.log(data.username);
             this.setState({
                 'username': data.username,
-                'isLoggedIn': 1,
+                'is_logged_in': 1,
             });
             this.forceUpdate();
         });
@@ -51,25 +65,23 @@ export class Content extends React.Component {
     }
     
     render() {
-        if(this.state.isLoggedIn === 0) return (
-            <LoginContent/>
-            );
-            
-        var messages =[];
-        for (var message of this.state['messages']) {
-            console.log(message);
-            var item = <li key={message}>{message}</li>;
-            messages.push(item);
+        if(this.state.is_logged_in === 0) return (<LoginContent/>);
+        
+        var all_users=[];
+        for (var user of this.state['all_users']) {
+            console.log(user);
+            var item = <li key={user}>{user}</li>;
+            all_users.push(item);
         }
         
         return  <div>
             <div id="thread_view" className="left" >
-                
+                <ul>{this.state.all_users}</ul>
             </div>
             
             <div className="right">
                 <div  id="conv_view">
-                    <li id='messages'>{messages}</li>
+                    <ul id='messages'>{this.state.messages}</ul>
                 </div>
                 <form onSubmit={this.handleSubmit} id="message_form">
                     <textarea id="message_box"/>
