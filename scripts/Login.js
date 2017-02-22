@@ -4,15 +4,16 @@ import { Socket } from './Socket';
 class LoginButton extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
-        console.log('poop');
-        FB.getLoginStatus((response) => {
-            console.log(response);
-            if (response.status == 'connected') {
-                Socket.emit('login', {
-                    'facebook_user_token': response.authResponse.accessToken,
-                });
-            }
-        });
+        console.log('login button pressed');
+        Socket.emit('login');
+        //FB.getLoginStatus((response) => {
+        //    console.log(response);
+        //    if (response.status == 'connected') {
+        //        Socket.emit('login', {
+        //            'facebook_user_token': response.authResponse.accessToken,
+        //        });
+        //    }
+        //});
     }
     render() {
         return (
@@ -24,8 +25,8 @@ class LoginButton extends React.Component {
 }
 
 export class LoginContent extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             'numbers': []
         };

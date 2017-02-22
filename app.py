@@ -1,8 +1,10 @@
 # app.py
-import os, flask, flask_socketio
-
+import os, flask, flask_socketio, models, flask_sqlalchemy, random
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://main_user:poopsareawesome@localhost/postgres'
+db = flask_sqlalchemy.SQLAlchemy(app)
 
 @app.route('/')
 def hello():
@@ -11,24 +13,24 @@ def hello():
 @socketio.on('connect')
 def on_connect():
     print 'Someone connected!'
-    flask_socketio.emit('message', {
-        'from': 'Server',
-        'to': 'chat_room',
-        'text': 'got your connection'
-    })
     
 @socketio.on('login')
-def on_login(data):
+def on_login():
     print 'login'
-    print data['facebook_user_token']
+    flask_socketio.emit('valid login', {
+        'username': random.randint(1,9999)
+    })
+@socketio.on('get messages')
+def on_get_messages(data):
+    print 'get messages'
     
 @socketio.on('message')
 def on_message(data):
     print 'a message happened'
-
-socketio.run(
-    app,
-    host=os.getenv('IP', '0.0.0.0'),
-    port=int(os.getenv('PORT', 8080)),
-    debug=True
-)
+if __name__ == '__main__': # __name__!
+    socketio.run(
+        app,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=int(os.getenv('PORT', 8080)),
+        debug=True
+    )
