@@ -3,6 +3,8 @@ import os, flask, flask_socketio, models, flask_sqlalchemy, random
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
+all_connected_users = {}
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://main_user:poopsareawesome@localhost/postgres'
 db = flask_sqlalchemy.SQLAlchemy(app)
 
@@ -30,6 +32,7 @@ def on_message(data):
     print 'from:', data['from']
     print 'to:', data['to']
     print 'text:', data['text']
+    flask_socketio.emit('message',data)
     
 if __name__ == '__main__': # __name__!
     socketio.run(

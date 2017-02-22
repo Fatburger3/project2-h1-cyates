@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { SendMessageBox } from './SendMessageBox';
 import { Socket } from './Socket';
 import { LoginContent } from './Login';
 
@@ -57,7 +56,11 @@ export class Content extends React.Component {
             );
             
         var messages =[];
-        Socket.emit('get messages', {'from':this.state.username});
+        for (var message of this.state['messages']) {
+            console.log(message);
+            var item = <li key={message}>{message}</li>;
+            messages.push(item);
+        }
         
         return  <div>
             <div id="thread_view" className="left" >

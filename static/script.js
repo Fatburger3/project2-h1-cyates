@@ -12752,8 +12752,6 @@ var _react = __webpack_require__(62);
 
 var React = _interopRequireWildcard(_react);
 
-var _SendMessageBox = __webpack_require__(232);
-
 var _Socket = __webpack_require__(61);
 
 var _Login = __webpack_require__(103);
@@ -12828,7 +12826,36 @@ var Content = exports.Content = function (_React$Component) {
             if (this.state.isLoggedIn === 0) return React.createElement(_Login.LoginContent, null);
 
             var messages = [];
-            _Socket.Socket.emit('get messages', { 'from': this.state.username });
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.state['messages'][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var message = _step.value;
+
+                    console.log(message);
+                    var item = React.createElement(
+                        'li',
+                        { key: message },
+                        message
+                    );
+                    messages.push(item);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
 
             return React.createElement(
                 'div',
@@ -29995,13 +30022,6 @@ ReactDOM.render(React.createElement(_Content.Content, null), document.getElement
 _Socket.Socket.on('connect', function () {
     console.log('Connecting to the server!');
 });
-
-/***/ }),
-/* 232 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 
 /***/ })
 /******/ ]);
