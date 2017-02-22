@@ -16,7 +16,7 @@ export class SendMessageBox extends React.Component {
     render() {
         return ( 
                 <form onSubmit={this.handleSubmit} id="message_form">
-                    <input type="text" id="message_box"/>
+                    <textarea id="message_box"/>
                     <button id="message_button">Send</button>
                 </form>
             

@@ -30030,7 +30030,7 @@ var SendMessageBox = exports.SendMessageBox = function (_React$Component) {
             return React.createElement(
                 'form',
                 { onSubmit: this.handleSubmit, id: 'message_form' },
-                React.createElement('input', { type: 'text', id: 'message_box' }),
+                React.createElement('textarea', { id: 'message_box' }),
                 React.createElement(
                     'button',
                     { id: 'message_button' },
