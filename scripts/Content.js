@@ -41,6 +41,16 @@ export class Content extends React.Component {
         });
     }
     
+    handleSubmit(event) {
+        event.preventDefault();
+        Socket.emit('message', {
+            'from': 'user',
+            'to': 'user',
+            'text': document.getElementById('message_box').value,
+        });
+        console.log('Sent a message');
+    }
+    
     render() {
         if(this.state.isLoggedIn === 0) return (
             <LoginContent/>
@@ -58,7 +68,10 @@ export class Content extends React.Component {
                 <div  id="conv_view">
                     <li id='messages'>{messages}</li>
                 </div>
-                <SendMessageBox  id="text_view"/>
+                <form onSubmit={this.handleSubmit} id="message_form">
+                    <textarea id="message_box"/>
+                    <button id="message_button">Send</button>
+                </form>
             </div>
         </div>;
     }
