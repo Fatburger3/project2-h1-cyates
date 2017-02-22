@@ -7,7 +7,8 @@ export class SendMessageBox extends React.Component {
         event.preventDefault();
         Socket.emit('message', {
             'from': 'user',
-            'text': document.getElementById('message_box').text,
+            'to': 'user',
+            'text': 'poop'//document.getElementById('message_box').text,
         });
         console.log('Sent a message');
     }

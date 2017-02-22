@@ -30019,7 +30019,8 @@ var SendMessageBox = exports.SendMessageBox = function (_React$Component) {
             event.preventDefault();
             _Socket.Socket.emit('message', {
                 'from': 'user',
-                'text': document.getElementById('message_box').text
+                'to': 'user',
+                'text': 'poop' //document.getElementById('message_box').text,
             });
             console.log('Sent a message');
         }

@@ -27,6 +27,10 @@ def on_get_messages(data):
 @socketio.on('message')
 def on_message(data):
     print 'a message happened'
+    print 'from:', data['from']
+    print 'to:', data['to']
+    print 'text:', data['text']
+    
 if __name__ == '__main__': # __name__!
     socketio.run(
         app,
